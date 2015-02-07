@@ -1,5 +1,7 @@
 package net.balq.firstmod.block;
 
+import java.util.ArrayList;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.balq.firstmod.BalqFisrtMod;
@@ -9,6 +11,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -49,6 +52,11 @@ public class BombBlock extends BlockContainer {
 	@Override
 	public IIcon getIcon(int side, int metadata) {
 		return metadata==0?blockIcon:idleIcon;
+	}
+	
+	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+		return new ArrayList<ItemStack>();
 	}
 	
 	//public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
