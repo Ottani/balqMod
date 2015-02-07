@@ -4,4 +4,7 @@
 /.settings/
 /.classpath
 /.project
-
+/eclipse/
+/gradle/
+/gradlew
+/gradlew.bat
