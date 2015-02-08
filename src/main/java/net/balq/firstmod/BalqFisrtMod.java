@@ -40,7 +40,7 @@ public class BalqFisrtMod {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		ConfigManager.init(event.getSuggestedConfigurationFile());
-		proxy.initItems();
+		proxy.preInit();
 
 		GameRegistry.registerWorldGenerator(new BalqWorldGenerator(), 1);
 	}
@@ -48,9 +48,9 @@ public class BalqFisrtMod {
 	// Do your mod setup. Build whatever data structures you care about.
 	// Register recipes, send FMLInterModComms messages to other mods.
 	@EventHandler
-	public void init(FMLInitializationEvent event) {
-		proxy.initRecipes();
-		proxy.initTiles();
+	public void load(FMLInitializationEvent event) {
+		proxy.load();
+		proxy.initRenderers();
 	}
 
 	// Handle interaction with other mods, complete your setup based on this.
