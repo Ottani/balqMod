@@ -5,6 +5,7 @@ import net.balq.firstmod.BalqFisrtMod;
 import net.balq.firstmod.block.BalqBlocks;
 import net.balq.firstmod.entity.Entities;
 import net.balq.firstmod.item.BalqItems;
+import net.balq.firstmod.network.PacketHandler;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -29,6 +30,8 @@ public class CommonProxy {
 				"DDD", " S ", " S ", 'D', BalqItems.gem, 'S', Items.stick });
 		GameRegistry.addShapedRecipe(new ItemStack(BalqItems.wand, 1), new Object[] {
 			"  D", " S ", "S  ", 'D', BalqItems.gem, 'S', Items.stick });
+		
+		PacketHandler.init();
 	}
 	
 	public void initRenderers() {

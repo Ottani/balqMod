@@ -1,12 +1,15 @@
 package net.balq.firstmod.entity;
 
 import io.netty.buffer.ByteBuf;
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import net.balq.firstmod.network.MessageShipDropBomb;
+import net.balq.firstmod.network.PacketHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntitySpaceShip extends Entity implements IEntityAdditionalSpawnData {
 	private boolean charged;
@@ -14,6 +17,7 @@ public class EntitySpaceShip extends Entity implements IEntityAdditionalSpawnDat
 	public EntitySpaceShip(World world) {
 		super(world);
 		setSize(1.5f, 0.6f);
+		System.out.println("New EntitySpaceShip on client? "+world.isRemote);
 	}
 	
 	public boolean isCharged() {
@@ -67,11 +71,31 @@ public class EntitySpaceShip extends Entity implements IEntityAdditionalSpawnDat
 				motionY = 0.0;
 			}
 			
+		} else {
+			sendInformation();
 		}
 		setPosition(posX+motionX, posY+motionY, posZ+motionZ);
 
 	}
 	
+	private boolean lastPressedState;
+	
+	private void sendInformation() {
+		boolean state = Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed();
+		if (state) {
+			System.out.println("state="+state);
+			System.out.println("lastPressedState="+lastPressedState);
+			System.out.println("charged="+charged);
+		}
+		if (state && !lastPressedState && charged && riddenByEntity == Minecraft.getMinecraft().thePlayer) {
+			MessageShipDropBomb message = new MessageShipDropBomb(this.getEntityId());
+			PacketHandler.INSTANCE.sendToServer(message);;
+			System.out.println("Sent message: "+message);
+		}
+
+		lastPressedState = state;
+	}
+
 	@Override
 	protected void entityInit() {
 
@@ -95,6 +119,14 @@ public class EntitySpaceShip extends Entity implements IEntityAdditionalSpawnDat
 	@Override
 	public void readSpawnData(ByteBuf additionalData) {
 		charged = additionalData.readBoolean();
+	}
+
+	public void doDrop() {
+		EntityBomb bomb = new EntityBomb(worldObj);
+		bomb.posX = posX;
+		bomb.posY = posY;
+		bomb.posZ = posZ;
+		worldObj.spawnEntityInWorld(bomb);
 	}
 
 }
